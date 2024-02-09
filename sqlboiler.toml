@@ -1,0 +1,18 @@
+output   = "my_models"
+wipe     = true
+no-tests = true
+add-enum-types = true
+
+[psql]
+  dbname = "gpu"
+  host   = "localhost"
+  port   = 5432
+  user   = "postgres"
+  pass   = "postgres"
+  schema = "public"
+  sslmode = "disable"
+
+
+[[models]]
+  name = "GPU"
+  table = "gpus"
