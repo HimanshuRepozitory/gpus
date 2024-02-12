@@ -21,17 +21,17 @@ import (
 	"github.com/volatiletech/strmangle"
 )
 
-// Gpus is an object representing the database table.
+// Gpu is an object representing the database table.
 type Gpu struct {
 	ID       int    `boil:"id" json:"id" toml:"id" yaml:"id"`
 	Username string `boil:"username" json:"username" toml:"username" yaml:"username"`
 	Comment  string `boil:"comment" json:"comment" toml:"comment" yaml:"comment"`
 
-	R *gpusR `boil:"-" json:"-" toml:"-" yaml:"-"`
-	L gpusL  `boil:"-" json:"-" toml:"-" yaml:"-"`
+	R *gpuR `boil:"-" json:"-" toml:"-" yaml:"-"`
+	L gpuL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
-var GpusColumns = struct {
+var GpuColumns = struct {
 	ID       string
 	Username string
 	Comment  string
@@ -41,7 +41,7 @@ var GpusColumns = struct {
 	Comment:  "comment",
 }
 
-var GpusTableColumns = struct {
+var GpuTableColumns = struct {
 	ID       string
 	Username string
 	Comment  string
@@ -103,7 +103,7 @@ func (w whereHelperstring) NIN(slice []string) qm.QueryMod {
 	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
 }
 
-var GpusWhere = struct {
+var GpuWhere = struct {
 	ID       whereHelperint
 	Username whereHelperstring
 	Comment  whereHelperstring
@@ -113,53 +113,53 @@ var GpusWhere = struct {
 	Comment:  whereHelperstring{field: "\"gpus\".\"comment\""},
 }
 
-// GpusRels is where relationship names are stored.
-var GpusRels = struct {
+// GpuRels is where relationship names are stored.
+var GpuRels = struct {
 }{}
 
-// gpusR is where relationships are stored.
-type gpusR struct {
+// gpuR is where relationships are stored.
+type gpuR struct {
 }
 
 // NewStruct creates a new relationship struct
-func (*gpusR) NewStruct() *gpusR {
-	return &gpusR{}
+func (*gpuR) NewStruct() *gpuR {
+	return &gpuR{}
 }
 
-// gpusL is where Load methods for each relationship are stored.
-type gpusL struct{}
+// gpuL is where Load methods for each relationship are stored.
+type gpuL struct{}
 
 var (
-	gpusAllColumns            = []string{"id", "username", "comment"}
-	gpusColumnsWithoutDefault = []string{"username", "comment"}
-	gpusColumnsWithDefault    = []string{"id"}
-	gpusPrimaryKeyColumns     = []string{"id"}
-	gpusGeneratedColumns      = []string{}
+	gpuAllColumns            = []string{"id", "username", "comment"}
+	gpuColumnsWithoutDefault = []string{"username", "comment"}
+	gpuColumnsWithDefault    = []string{"id"}
+	gpuPrimaryKeyColumns     = []string{"id"}
+	gpuGeneratedColumns      = []string{}
 )
 
 type (
-	// GpusSlice is an alias for a slice of pointers to Gpus.
-	// This should almost always be used instead of []Gpus.
-	GpusSlice []*Gpu
-	// GpusHook is the signature for custom Gpus hook methods
-	GpusHook func(context.Context, boil.ContextExecutor, *Gpu) error
+	// GpuSlice is an alias for a slice of pointers to Gpu.
+	// This should almost always be used instead of []Gpu.
+	GpuSlice []*Gpu
+	// GpuHook is the signature for custom Gpu hook methods
+	GpuHook func(context.Context, boil.ContextExecutor, *Gpu) error
 
-	gpusQuery struct {
+	gpuQuery struct {
 		*queries.Query
 	}
 )
 
 // Cache for insert, update and upsert
 var (
-	gpusType                 = reflect.TypeOf(&Gpu{})
-	gpusMapping              = queries.MakeStructMapping(gpusType)
-	gpusPrimaryKeyMapping, _ = queries.BindMapping(gpusType, gpusMapping, gpusPrimaryKeyColumns)
-	gpusInsertCacheMut       sync.RWMutex
-	gpusInsertCache          = make(map[string]insertCache)
-	gpusUpdateCacheMut       sync.RWMutex
-	gpusUpdateCache          = make(map[string]updateCache)
-	gpusUpsertCacheMut       sync.RWMutex
-	gpusUpsertCache          = make(map[string]insertCache)
+	gpuType                 = reflect.TypeOf(&Gpu{})
+	gpuMapping              = queries.MakeStructMapping(gpuType)
+	gpuPrimaryKeyMapping, _ = queries.BindMapping(gpuType, gpuMapping, gpuPrimaryKeyColumns)
+	gpuInsertCacheMut       sync.RWMutex
+	gpuInsertCache          = make(map[string]insertCache)
+	gpuUpdateCacheMut       sync.RWMutex
+	gpuUpdateCache          = make(map[string]updateCache)
+	gpuUpsertCacheMut       sync.RWMutex
+	gpuUpsertCache          = make(map[string]insertCache)
 )
 
 var (
@@ -170,28 +170,28 @@ var (
 	_ = qmhelper.Where
 )
 
-var gpusAfterSelectMu sync.Mutex
-var gpusAfterSelectHooks []GpusHook
+var gpuAfterSelectMu sync.Mutex
+var gpuAfterSelectHooks []GpuHook
 
-var gpusBeforeInsertMu sync.Mutex
-var gpusBeforeInsertHooks []GpusHook
-var gpusAfterInsertMu sync.Mutex
-var gpusAfterInsertHooks []GpusHook
+var gpuBeforeInsertMu sync.Mutex
+var gpuBeforeInsertHooks []GpuHook
+var gpuAfterInsertMu sync.Mutex
+var gpuAfterInsertHooks []GpuHook
 
-var gpusBeforeUpdateMu sync.Mutex
-var gpusBeforeUpdateHooks []GpusHook
-var gpusAfterUpdateMu sync.Mutex
-var gpusAfterUpdateHooks []GpusHook
+var gpuBeforeUpdateMu sync.Mutex
+var gpuBeforeUpdateHooks []GpuHook
+var gpuAfterUpdateMu sync.Mutex
+var gpuAfterUpdateHooks []GpuHook
 
-var gpusBeforeDeleteMu sync.Mutex
-var gpusBeforeDeleteHooks []GpusHook
-var gpusAfterDeleteMu sync.Mutex
-var gpusAfterDeleteHooks []GpusHook
+var gpuBeforeDeleteMu sync.Mutex
+var gpuBeforeDeleteHooks []GpuHook
+var gpuAfterDeleteMu sync.Mutex
+var gpuAfterDeleteHooks []GpuHook
 
-var gpusBeforeUpsertMu sync.Mutex
-var gpusBeforeUpsertHooks []GpusHook
-var gpusAfterUpsertMu sync.Mutex
-var gpusAfterUpsertHooks []GpusHook
+var gpuBeforeUpsertMu sync.Mutex
+var gpuBeforeUpsertHooks []GpuHook
+var gpuAfterUpsertMu sync.Mutex
+var gpuAfterUpsertHooks []GpuHook
 
 // doAfterSelectHooks executes all "after Select" hooks.
 func (o *Gpu) doAfterSelectHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
@@ -199,7 +199,7 @@ func (o *Gpu) doAfterSelectHooks(ctx context.Context, exec boil.ContextExecutor)
 		return nil
 	}
 
-	for _, hook := range gpusAfterSelectHooks {
+	for _, hook := range gpuAfterSelectHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -214,7 +214,7 @@ func (o *Gpu) doBeforeInsertHooks(ctx context.Context, exec boil.ContextExecutor
 		return nil
 	}
 
-	for _, hook := range gpusBeforeInsertHooks {
+	for _, hook := range gpuBeforeInsertHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -229,7 +229,7 @@ func (o *Gpu) doAfterInsertHooks(ctx context.Context, exec boil.ContextExecutor)
 		return nil
 	}
 
-	for _, hook := range gpusAfterInsertHooks {
+	for _, hook := range gpuAfterInsertHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -244,7 +244,7 @@ func (o *Gpu) doBeforeUpdateHooks(ctx context.Context, exec boil.ContextExecutor
 		return nil
 	}
 
-	for _, hook := range gpusBeforeUpdateHooks {
+	for _, hook := range gpuBeforeUpdateHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -259,7 +259,7 @@ func (o *Gpu) doAfterUpdateHooks(ctx context.Context, exec boil.ContextExecutor)
 		return nil
 	}
 
-	for _, hook := range gpusAfterUpdateHooks {
+	for _, hook := range gpuAfterUpdateHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -274,7 +274,7 @@ func (o *Gpu) doBeforeDeleteHooks(ctx context.Context, exec boil.ContextExecutor
 		return nil
 	}
 
-	for _, hook := range gpusBeforeDeleteHooks {
+	for _, hook := range gpuBeforeDeleteHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -289,7 +289,7 @@ func (o *Gpu) doAfterDeleteHooks(ctx context.Context, exec boil.ContextExecutor)
 		return nil
 	}
 
-	for _, hook := range gpusAfterDeleteHooks {
+	for _, hook := range gpuAfterDeleteHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -304,7 +304,7 @@ func (o *Gpu) doBeforeUpsertHooks(ctx context.Context, exec boil.ContextExecutor
 		return nil
 	}
 
-	for _, hook := range gpusBeforeUpsertHooks {
+	for _, hook := range gpuBeforeUpsertHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -319,7 +319,7 @@ func (o *Gpu) doAfterUpsertHooks(ctx context.Context, exec boil.ContextExecutor)
 		return nil
 	}
 
-	for _, hook := range gpusAfterUpsertHooks {
+	for _, hook := range gpuAfterUpsertHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -328,50 +328,50 @@ func (o *Gpu) doAfterUpsertHooks(ctx context.Context, exec boil.ContextExecutor)
 	return nil
 }
 
-// AddGpusHook registers your hook function for all future operations.
-func AddGpusHook(hookPoint boil.HookPoint, gpusHook GpusHook) {
+// AddGpuHook registers your hook function for all future operations.
+func AddGpuHook(hookPoint boil.HookPoint, gpuHook GpuHook) {
 	switch hookPoint {
 	case boil.AfterSelectHook:
-		gpusAfterSelectMu.Lock()
-		gpusAfterSelectHooks = append(gpusAfterSelectHooks, gpusHook)
-		gpusAfterSelectMu.Unlock()
+		gpuAfterSelectMu.Lock()
+		gpuAfterSelectHooks = append(gpuAfterSelectHooks, gpuHook)
+		gpuAfterSelectMu.Unlock()
 	case boil.BeforeInsertHook:
-		gpusBeforeInsertMu.Lock()
-		gpusBeforeInsertHooks = append(gpusBeforeInsertHooks, gpusHook)
-		gpusBeforeInsertMu.Unlock()
+		gpuBeforeInsertMu.Lock()
+		gpuBeforeInsertHooks = append(gpuBeforeInsertHooks, gpuHook)
+		gpuBeforeInsertMu.Unlock()
 	case boil.AfterInsertHook:
-		gpusAfterInsertMu.Lock()
-		gpusAfterInsertHooks = append(gpusAfterInsertHooks, gpusHook)
-		gpusAfterInsertMu.Unlock()
+		gpuAfterInsertMu.Lock()
+		gpuAfterInsertHooks = append(gpuAfterInsertHooks, gpuHook)
+		gpuAfterInsertMu.Unlock()
 	case boil.BeforeUpdateHook:
-		gpusBeforeUpdateMu.Lock()
-		gpusBeforeUpdateHooks = append(gpusBeforeUpdateHooks, gpusHook)
-		gpusBeforeUpdateMu.Unlock()
+		gpuBeforeUpdateMu.Lock()
+		gpuBeforeUpdateHooks = append(gpuBeforeUpdateHooks, gpuHook)
+		gpuBeforeUpdateMu.Unlock()
 	case boil.AfterUpdateHook:
-		gpusAfterUpdateMu.Lock()
-		gpusAfterUpdateHooks = append(gpusAfterUpdateHooks, gpusHook)
-		gpusAfterUpdateMu.Unlock()
+		gpuAfterUpdateMu.Lock()
+		gpuAfterUpdateHooks = append(gpuAfterUpdateHooks, gpuHook)
+		gpuAfterUpdateMu.Unlock()
 	case boil.BeforeDeleteHook:
-		gpusBeforeDeleteMu.Lock()
-		gpusBeforeDeleteHooks = append(gpusBeforeDeleteHooks, gpusHook)
-		gpusBeforeDeleteMu.Unlock()
+		gpuBeforeDeleteMu.Lock()
+		gpuBeforeDeleteHooks = append(gpuBeforeDeleteHooks, gpuHook)
+		gpuBeforeDeleteMu.Unlock()
 	case boil.AfterDeleteHook:
-		gpusAfterDeleteMu.Lock()
-		gpusAfterDeleteHooks = append(gpusAfterDeleteHooks, gpusHook)
-		gpusAfterDeleteMu.Unlock()
+		gpuAfterDeleteMu.Lock()
+		gpuAfterDeleteHooks = append(gpuAfterDeleteHooks, gpuHook)
+		gpuAfterDeleteMu.Unlock()
 	case boil.BeforeUpsertHook:
-		gpusBeforeUpsertMu.Lock()
-		gpusBeforeUpsertHooks = append(gpusBeforeUpsertHooks, gpusHook)
-		gpusBeforeUpsertMu.Unlock()
+		gpuBeforeUpsertMu.Lock()
+		gpuBeforeUpsertHooks = append(gpuBeforeUpsertHooks, gpuHook)
+		gpuBeforeUpsertMu.Unlock()
 	case boil.AfterUpsertHook:
-		gpusAfterUpsertMu.Lock()
-		gpusAfterUpsertHooks = append(gpusAfterUpsertHooks, gpusHook)
-		gpusAfterUpsertMu.Unlock()
+		gpuAfterUpsertMu.Lock()
+		gpuAfterUpsertHooks = append(gpuAfterUpsertHooks, gpuHook)
+		gpuAfterUpsertMu.Unlock()
 	}
 }
 
-// One returns a single gpus record from the query.
-func (q gpusQuery) One(ctx context.Context, exec boil.ContextExecutor) (*Gpu, error) {
+// One returns a single gpu record from the query.
+func (q gpuQuery) One(ctx context.Context, exec boil.ContextExecutor) (*Gpu, error) {
 	o := &Gpu{}
 
 	queries.SetLimit(q.Query, 1)
@@ -391,16 +391,16 @@ func (q gpusQuery) One(ctx context.Context, exec boil.ContextExecutor) (*Gpu, er
 	return o, nil
 }
 
-// All returns all Gpus records from the query.
-func (q gpusQuery) All(ctx context.Context, exec boil.ContextExecutor) (GpusSlice, error) {
+// All returns all Gpu records from the query.
+func (q gpuQuery) All(ctx context.Context, exec boil.ContextExecutor) (GpuSlice, error) {
 	var o []*Gpu
 
 	err := q.Bind(ctx, exec, &o)
 	if err != nil {
-		return nil, errors.Wrap(err, "models: failed to assign all query results to Gpus slice")
+		return nil, errors.Wrap(err, "models: failed to assign all query results to Gpu slice")
 	}
 
-	if len(gpusAfterSelectHooks) != 0 {
+	if len(gpuAfterSelectHooks) != 0 {
 		for _, obj := range o {
 			if err := obj.doAfterSelectHooks(ctx, exec); err != nil {
 				return o, err
@@ -411,8 +411,8 @@ func (q gpusQuery) All(ctx context.Context, exec boil.ContextExecutor) (GpusSlic
 	return o, nil
 }
 
-// Count returns the count of all Gpus records in the query.
-func (q gpusQuery) Count(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
+// Count returns the count of all Gpu records in the query.
+func (q gpuQuery) Count(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	var count int64
 
 	queries.SetSelect(q.Query, nil)
@@ -427,7 +427,7 @@ func (q gpusQuery) Count(ctx context.Context, exec boil.ContextExecutor) (int64,
 }
 
 // Exists checks if the row exists in the table.
-func (q gpusQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bool, error) {
+func (q gpuQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bool, error) {
 	var count int64
 
 	queries.SetSelect(q.Query, nil)
@@ -443,20 +443,20 @@ func (q gpusQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bool,
 }
 
 // Gpus retrieves all the records using an executor.
-func Gpus(mods ...qm.QueryMod) gpusQuery {
+func Gpus(mods ...qm.QueryMod) gpuQuery {
 	mods = append(mods, qm.From("\"gpus\""))
 	q := NewQuery(mods...)
 	if len(queries.GetSelect(q)) == 0 {
 		queries.SetSelect(q, []string{"\"gpus\".*"})
 	}
 
-	return gpusQuery{q}
+	return gpuQuery{q}
 }
 
-// FindGpus retrieves a single record by ID with an executor.
+// FindGpu retrieves a single record by ID with an executor.
 // If selectCols is empty Find will return all columns.
-func FindGpus(ctx context.Context, exec boil.ContextExecutor, iD int, selectCols ...string) (*Gpu, error) {
-	gpusObj := &Gpu{}
+func FindGpu(ctx context.Context, exec boil.ContextExecutor, iD int, selectCols ...string) (*Gpu, error) {
+	gpuObj := &Gpu{}
 
 	sel := "*"
 	if len(selectCols) > 0 {
@@ -468,7 +468,7 @@ func FindGpus(ctx context.Context, exec boil.ContextExecutor, iD int, selectCols
 
 	q := queries.Raw(query, iD)
 
-	err := q.Bind(ctx, exec, gpusObj)
+	err := q.Bind(ctx, exec, gpuObj)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
@@ -476,11 +476,11 @@ func FindGpus(ctx context.Context, exec boil.ContextExecutor, iD int, selectCols
 		return nil, errors.Wrap(err, "models: unable to select from gpus")
 	}
 
-	if err = gpusObj.doAfterSelectHooks(ctx, exec); err != nil {
-		return gpusObj, err
+	if err = gpuObj.doAfterSelectHooks(ctx, exec); err != nil {
+		return gpuObj, err
 	}
 
-	return gpusObj, nil
+	return gpuObj, nil
 }
 
 // Insert a single record using an executor.
@@ -496,26 +496,26 @@ func (o *Gpu) Insert(ctx context.Context, exec boil.ContextExecutor, columns boi
 		return err
 	}
 
-	nzDefaults := queries.NonZeroDefaultSet(gpusColumnsWithDefault, o)
+	nzDefaults := queries.NonZeroDefaultSet(gpuColumnsWithDefault, o)
 
 	key := makeCacheKey(columns, nzDefaults)
-	gpusInsertCacheMut.RLock()
-	cache, cached := gpusInsertCache[key]
-	gpusInsertCacheMut.RUnlock()
+	gpuInsertCacheMut.RLock()
+	cache, cached := gpuInsertCache[key]
+	gpuInsertCacheMut.RUnlock()
 
 	if !cached {
 		wl, returnColumns := columns.InsertColumnSet(
-			gpusAllColumns,
-			gpusColumnsWithDefault,
-			gpusColumnsWithoutDefault,
+			gpuAllColumns,
+			gpuColumnsWithDefault,
+			gpuColumnsWithoutDefault,
 			nzDefaults,
 		)
 
-		cache.valueMapping, err = queries.BindMapping(gpusType, gpusMapping, wl)
+		cache.valueMapping, err = queries.BindMapping(gpuType, gpuMapping, wl)
 		if err != nil {
 			return err
 		}
-		cache.retMapping, err = queries.BindMapping(gpusType, gpusMapping, returnColumns)
+		cache.retMapping, err = queries.BindMapping(gpuType, gpuMapping, returnColumns)
 		if err != nil {
 			return err
 		}
@@ -554,15 +554,15 @@ func (o *Gpu) Insert(ctx context.Context, exec boil.ContextExecutor, columns boi
 	}
 
 	if !cached {
-		gpusInsertCacheMut.Lock()
-		gpusInsertCache[key] = cache
-		gpusInsertCacheMut.Unlock()
+		gpuInsertCacheMut.Lock()
+		gpuInsertCache[key] = cache
+		gpuInsertCacheMut.Unlock()
 	}
 
 	return o.doAfterInsertHooks(ctx, exec)
 }
 
-// Update uses an executor to update the Gpus.
+// Update uses an executor to update the Gpu.
 // See boil.Columns.UpdateColumnSet documentation to understand column list inference for updates.
 // Update does not automatically update the record in case of default values. Use .Reload() to refresh the records.
 func (o *Gpu) Update(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) (int64, error) {
@@ -571,14 +571,14 @@ func (o *Gpu) Update(ctx context.Context, exec boil.ContextExecutor, columns boi
 		return 0, err
 	}
 	key := makeCacheKey(columns, nil)
-	gpusUpdateCacheMut.RLock()
-	cache, cached := gpusUpdateCache[key]
-	gpusUpdateCacheMut.RUnlock()
+	gpuUpdateCacheMut.RLock()
+	cache, cached := gpuUpdateCache[key]
+	gpuUpdateCacheMut.RUnlock()
 
 	if !cached {
 		wl := columns.UpdateColumnSet(
-			gpusAllColumns,
-			gpusPrimaryKeyColumns,
+			gpuAllColumns,
+			gpuPrimaryKeyColumns,
 		)
 
 		if !columns.IsWhitelist() {
@@ -590,9 +590,9 @@ func (o *Gpu) Update(ctx context.Context, exec boil.ContextExecutor, columns boi
 
 		cache.query = fmt.Sprintf("UPDATE \"gpus\" SET %s WHERE %s",
 			strmangle.SetParamNames("\"", "\"", 1, wl),
-			strmangle.WhereClause("\"", "\"", len(wl)+1, gpusPrimaryKeyColumns),
+			strmangle.WhereClause("\"", "\"", len(wl)+1, gpuPrimaryKeyColumns),
 		)
-		cache.valueMapping, err = queries.BindMapping(gpusType, gpusMapping, append(wl, gpusPrimaryKeyColumns...))
+		cache.valueMapping, err = queries.BindMapping(gpuType, gpuMapping, append(wl, gpuPrimaryKeyColumns...))
 		if err != nil {
 			return 0, err
 		}
@@ -617,16 +617,16 @@ func (o *Gpu) Update(ctx context.Context, exec boil.ContextExecutor, columns boi
 	}
 
 	if !cached {
-		gpusUpdateCacheMut.Lock()
-		gpusUpdateCache[key] = cache
-		gpusUpdateCacheMut.Unlock()
+		gpuUpdateCacheMut.Lock()
+		gpuUpdateCache[key] = cache
+		gpuUpdateCacheMut.Unlock()
 	}
 
 	return rowsAff, o.doAfterUpdateHooks(ctx, exec)
 }
 
 // UpdateAll updates all rows with the specified column values.
-func (q gpusQuery) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
+func (q gpuQuery) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
 	queries.SetUpdate(q.Query, cols)
 
 	result, err := q.Query.ExecContext(ctx, exec)
@@ -643,7 +643,7 @@ func (q gpusQuery) UpdateAll(ctx context.Context, exec boil.ContextExecutor, col
 }
 
 // UpdateAll updates all rows with the specified column values, using an executor.
-func (o GpusSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
+func (o GpuSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
 	ln := int64(len(o))
 	if ln == 0 {
 		return 0, nil
@@ -665,13 +665,13 @@ func (o GpusSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor, col
 
 	// Append all of the primary key values for each column
 	for _, obj := range o {
-		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), gpusPrimaryKeyMapping)
+		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), gpuPrimaryKeyMapping)
 		args = append(args, pkeyArgs...)
 	}
 
 	sql := fmt.Sprintf("UPDATE \"gpus\" SET %s WHERE %s",
 		strmangle.SetParamNames("\"", "\"", 1, colNames),
-		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), len(colNames)+1, gpusPrimaryKeyColumns, len(o)))
+		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), len(colNames)+1, gpuPrimaryKeyColumns, len(o)))
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -680,12 +680,12 @@ func (o GpusSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor, col
 	}
 	result, err := exec.ExecContext(ctx, sql, args...)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to update all in gpus slice")
+		return 0, errors.Wrap(err, "models: unable to update all in gpu slice")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to retrieve rows affected all in update all gpus")
+		return 0, errors.Wrap(err, "models: unable to retrieve rows affected all in update all gpu")
 	}
 	return rowsAff, nil
 }
@@ -701,7 +701,7 @@ func (o *Gpu) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnCon
 		return err
 	}
 
-	nzDefaults := queries.NonZeroDefaultSet(gpusColumnsWithDefault, o)
+	nzDefaults := queries.NonZeroDefaultSet(gpuColumnsWithDefault, o)
 
 	// Build cache key in-line uglily - mysql vs psql problems
 	buf := strmangle.GetBuffer()
@@ -731,48 +731,48 @@ func (o *Gpu) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnCon
 	key := buf.String()
 	strmangle.PutBuffer(buf)
 
-	gpusUpsertCacheMut.RLock()
-	cache, cached := gpusUpsertCache[key]
-	gpusUpsertCacheMut.RUnlock()
+	gpuUpsertCacheMut.RLock()
+	cache, cached := gpuUpsertCache[key]
+	gpuUpsertCacheMut.RUnlock()
 
 	var err error
 
 	if !cached {
 		insert, _ := insertColumns.InsertColumnSet(
-			gpusAllColumns,
-			gpusColumnsWithDefault,
-			gpusColumnsWithoutDefault,
+			gpuAllColumns,
+			gpuColumnsWithDefault,
+			gpuColumnsWithoutDefault,
 			nzDefaults,
 		)
 
 		update := updateColumns.UpdateColumnSet(
-			gpusAllColumns,
-			gpusPrimaryKeyColumns,
+			gpuAllColumns,
+			gpuPrimaryKeyColumns,
 		)
 
 		if updateOnConflict && len(update) == 0 {
 			return errors.New("models: unable to upsert gpus, could not build update column list")
 		}
 
-		ret := strmangle.SetComplement(gpusAllColumns, strmangle.SetIntersect(insert, update))
+		ret := strmangle.SetComplement(gpuAllColumns, strmangle.SetIntersect(insert, update))
 
 		conflict := conflictColumns
 		if len(conflict) == 0 && updateOnConflict && len(update) != 0 {
-			if len(gpusPrimaryKeyColumns) == 0 {
+			if len(gpuPrimaryKeyColumns) == 0 {
 				return errors.New("models: unable to upsert gpus, could not build conflict column list")
 			}
 
-			conflict = make([]string, len(gpusPrimaryKeyColumns))
-			copy(conflict, gpusPrimaryKeyColumns)
+			conflict = make([]string, len(gpuPrimaryKeyColumns))
+			copy(conflict, gpuPrimaryKeyColumns)
 		}
 		cache.query = buildUpsertQueryPostgres(dialect, "\"gpus\"", updateOnConflict, ret, update, conflict, insert, opts...)
 
-		cache.valueMapping, err = queries.BindMapping(gpusType, gpusMapping, insert)
+		cache.valueMapping, err = queries.BindMapping(gpuType, gpuMapping, insert)
 		if err != nil {
 			return err
 		}
 		if len(ret) != 0 {
-			cache.retMapping, err = queries.BindMapping(gpusType, gpusMapping, ret)
+			cache.retMapping, err = queries.BindMapping(gpuType, gpuMapping, ret)
 			if err != nil {
 				return err
 			}
@@ -804,26 +804,26 @@ func (o *Gpu) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnCon
 	}
 
 	if !cached {
-		gpusUpsertCacheMut.Lock()
-		gpusUpsertCache[key] = cache
-		gpusUpsertCacheMut.Unlock()
+		gpuUpsertCacheMut.Lock()
+		gpuUpsertCache[key] = cache
+		gpuUpsertCacheMut.Unlock()
 	}
 
 	return o.doAfterUpsertHooks(ctx, exec)
 }
 
-// Delete deletes a single Gpus record with an executor.
+// Delete deletes a single Gpu record with an executor.
 // Delete will match against the primary key column to find the record to delete.
 func (o *Gpu) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	if o == nil {
-		return 0, errors.New("models: no Gpus provided for delete")
+		return 0, errors.New("models: no Gpu provided for delete")
 	}
 
 	if err := o.doBeforeDeleteHooks(ctx, exec); err != nil {
 		return 0, err
 	}
 
-	args := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), gpusPrimaryKeyMapping)
+	args := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), gpuPrimaryKeyMapping)
 	sql := "DELETE FROM \"gpus\" WHERE \"id\"=$1"
 
 	if boil.IsDebug(ctx) {
@@ -849,9 +849,9 @@ func (o *Gpu) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, err
 }
 
 // DeleteAll deletes all matching rows.
-func (q gpusQuery) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
+func (q gpuQuery) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	if q.Query == nil {
-		return 0, errors.New("models: no gpusQuery provided for delete all")
+		return 0, errors.New("models: no gpuQuery provided for delete all")
 	}
 
 	queries.SetDelete(q.Query)
@@ -870,12 +870,12 @@ func (q gpusQuery) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (in
 }
 
 // DeleteAll deletes all rows in the slice, using an executor.
-func (o GpusSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
+func (o GpuSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	if len(o) == 0 {
 		return 0, nil
 	}
 
-	if len(gpusBeforeDeleteHooks) != 0 {
+	if len(gpuBeforeDeleteHooks) != 0 {
 		for _, obj := range o {
 			if err := obj.doBeforeDeleteHooks(ctx, exec); err != nil {
 				return 0, err
@@ -885,12 +885,12 @@ func (o GpusSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (in
 
 	var args []interface{}
 	for _, obj := range o {
-		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), gpusPrimaryKeyMapping)
+		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), gpuPrimaryKeyMapping)
 		args = append(args, pkeyArgs...)
 	}
 
 	sql := "DELETE FROM \"gpus\" WHERE " +
-		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, gpusPrimaryKeyColumns, len(o))
+		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, gpuPrimaryKeyColumns, len(o))
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -899,7 +899,7 @@ func (o GpusSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (in
 	}
 	result, err := exec.ExecContext(ctx, sql, args...)
 	if err != nil {
-		return 0, errors.Wrap(err, "models: unable to delete all from gpus slice")
+		return 0, errors.Wrap(err, "models: unable to delete all from gpu slice")
 	}
 
 	rowsAff, err := result.RowsAffected()
@@ -907,7 +907,7 @@ func (o GpusSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (in
 		return 0, errors.Wrap(err, "models: failed to get rows affected by deleteall for gpus")
 	}
 
-	if len(gpusAfterDeleteHooks) != 0 {
+	if len(gpuAfterDeleteHooks) != 0 {
 		for _, obj := range o {
 			if err := obj.doAfterDeleteHooks(ctx, exec); err != nil {
 				return 0, err
@@ -921,7 +921,7 @@ func (o GpusSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (in
 // Reload refetches the object from the database
 // using the primary keys with an executor.
 func (o *Gpu) Reload(ctx context.Context, exec boil.ContextExecutor) error {
-	ret, err := FindGpus(ctx, exec, o.ID)
+	ret, err := FindGpu(ctx, exec, o.ID)
 	if err != nil {
 		return err
 	}
@@ -932,26 +932,26 @@ func (o *Gpu) Reload(ctx context.Context, exec boil.ContextExecutor) error {
 
 // ReloadAll refetches every row with matching primary key column values
 // and overwrites the original object slice with the newly updated slice.
-func (o *GpusSlice) ReloadAll(ctx context.Context, exec boil.ContextExecutor) error {
+func (o *GpuSlice) ReloadAll(ctx context.Context, exec boil.ContextExecutor) error {
 	if o == nil || len(*o) == 0 {
 		return nil
 	}
 
-	slice := GpusSlice{}
+	slice := GpuSlice{}
 	var args []interface{}
 	for _, obj := range *o {
-		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), gpusPrimaryKeyMapping)
+		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), gpuPrimaryKeyMapping)
 		args = append(args, pkeyArgs...)
 	}
 
 	sql := "SELECT \"gpus\".* FROM \"gpus\" WHERE " +
-		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, gpusPrimaryKeyColumns, len(*o))
+		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, gpuPrimaryKeyColumns, len(*o))
 
 	q := queries.Raw(sql, args...)
 
 	err := q.Bind(ctx, exec, &slice)
 	if err != nil {
-		return errors.Wrap(err, "models: unable to reload all in GpusSlice")
+		return errors.Wrap(err, "models: unable to reload all in GpuSlice")
 	}
 
 	*o = slice
@@ -959,8 +959,8 @@ func (o *GpusSlice) ReloadAll(ctx context.Context, exec boil.ContextExecutor) er
 	return nil
 }
 
-// GpusExists checks if the Gpus row exists.
-func GpusExists(ctx context.Context, exec boil.ContextExecutor, iD int) (bool, error) {
+// GpuExists checks if the Gpu row exists.
+func GpuExists(ctx context.Context, exec boil.ContextExecutor, iD int) (bool, error) {
 	var exists bool
 	sql := "select exists(select 1 from \"gpus\" where \"id\"=$1 limit 1)"
 
@@ -979,7 +979,7 @@ func GpusExists(ctx context.Context, exec boil.ContextExecutor, iD int) (bool, e
 	return exists, nil
 }
 
-// Exists checks if the Gpus row exists.
+// Exists checks if the Gpu row exists.
 func (o *Gpu) Exists(ctx context.Context, exec boil.ContextExecutor) (bool, error) {
-	return GpusExists(ctx, exec, o.ID)
+	return GpuExists(ctx, exec, o.ID)
 }

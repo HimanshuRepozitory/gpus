@@ -13,6 +13,9 @@ add-enum-types = true
   sslmode = "disable"
 
 
-[[models]]
-  name = "GPU"
-  table = "gpus"
+[[aliases.tables]]
+name = "gpus"
+up_singular = "Gpu"
+up_plural = "Gpus"
+down_singular = "gpu"
+down_plural = "gpus"

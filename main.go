@@ -22,32 +22,32 @@ type GpusData struct {
 func handleAddToGpu(c *gin.Context) {
 	data := GpusData{}
 	if err := c.BindJSON(&data); err != nil {
-         fmt.Println("error in binding!!")
-		 return;
+		fmt.Println("error in binding!!")
+		return
 	}
 
-	var insertData models.Gpu;
+	var insertData models.Gpu
 	insertData.Username = data.UserName
 	insertData.Comment = data.Comments
 
 	err := insertData.Insert(c, boil.GetContextDB(), boil.Infer())
-	
+
 	if err != nil {
-		fmt.Println("error in inserting data : ",err)
-		return 
+		fmt.Println("error in inserting data : ", err)
+		return
 	}
-	
-	c.JSON(http.StatusAccepted,gin.H{"success" : true, "data" : insertData})
-	
+
+	c.JSON(http.StatusAccepted, gin.H{"success": true, "data": insertData})
+
 }
 
 func handleGetGpu(c *gin.Context) {
 	Data, err := models.Gpus().All(c, boil.GetContextDB())
 	if err != nil {
-		fmt.Println("error in getting data : ",err)
-		return;
+		fmt.Println("error in getting data : ", err)
+		return
 	}
-	c.JSON(http.StatusAccepted,gin.H{"success" : true, "data" : Data})
+	c.JSON(http.StatusAccepted, gin.H{"success": true, "data": Data})
 }
 
 func connectDatabase() (*sql.DB, error) {
@@ -86,10 +86,9 @@ func main() {
 		fmt.Println("error in migration is : ", err)
 		return
 	}
-
 	router := gin.Default()
-	router.POST("/Add", handleAddToGpu)
-	router.GET("/show", handleGetGpu)
+	// router.POST("/Add", handleAddToGpu)
+	// router.GET("/show", handleGetGpu)
 
 	router.Run(":8080")
 }
